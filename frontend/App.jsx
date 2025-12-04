@@ -22,6 +22,23 @@ const LLM_MODELS = [
   { id: 'claude-3', name: 'Anthropic Claude 3', provider: 'anthropic', paid: true }
 ];
 
+const TTS_MODELS = [
+ { id: 'google-tts', name: 'Google Cloud TTS', provider: 'google', free: true },
+ { id: 'elevenlabs-v2', name: 'ElevenLabs V2', provider: 'elevenlabs', free: false },
+ { id: 'replicate-xtts', name: 'Replicate XTTS', provider: 'replicate', free: true },
+ { id: 'azure-speech', name: 'Azure Speech', provider: 'azure', free: false },
+ { id: 'cartesia', name: 'Cartesia', provider: 'cartesia', free: false }
+];
+
+const STT_MODELS = [
+ { id: 'google-stt', name: 'Google Cloud Speech-to-Text', provider: 'google', free: true },
+ { id: 'openai-whisper', name: 'OpenAI Whisper', provider: 'openai', free: false },
+ { id: 'groq-whisper', name: 'Groq Whisper', provider: 'groq', free: true },
+ { id: 'assemblyai', name: 'AssemblyAI', provider: 'assemblyai', free: false },
+ { id: 'deepgram', name: 'Deepgram', provider: 'deepgram', free: false },
+ { id: 'azure-stt', name: 'Azure Speech Recognition', provider: 'azure', free: false }
+];
+
 export default function App() {
   const [agents, setAgents] = useState([]);
   const [formData, setFormData] = useState({
@@ -30,7 +47,9 @@ export default function App() {
     systemInstruction: '',
     language: 'hi-IN',
     llmModel: 'groq-mixtral',
-    ttsVoice: 'default-indian'
+    ttsVoice: 'default-indian',
+ ttsModel: 'google-tts',
+ sttModel: 'google-stt'
   });
   const [voiceFile, setVoiceFile] = useState(null);
   const [voiceLibrary, setVoiceLibrary] = useState([]);
@@ -184,6 +203,38 @@ export default function App() {
                     </option>
                   ))}
                 </select>
+                
+ <div style={styles.formRow}>
+ <div style={styles.formGroup}>
+ <label>TTS Model</label>
+ <select
+ value={formData.ttsModel}
+ onChange={(e) => setFormData({ ...formData, ttsModel: e.target.value })}
+ style={styles.select}
+ >
+ {TTS_MODELS.map(model => (
+ <option key={model.id} value={model.id}>
+ {model.name} {model.free ? '(Free)' : '(Paid)'}
+ </option>
+ ))}
+ </select>
+ </div>
+
+ <div style={styles.formGroup}>
+ <label>STT Model</label>
+ <select
+ value={formData.sttModel}
+ onChange={(e) => setFormData({ ...formData, sttModel: e.target.value })}
+ style={styles.select}
+ >
+ {STT_MODELS.map(model => (
+ <option key={model.id} value={model.id}>
+ {model.name} {model.free ? '(Free)' : '(Paid)'}
+ </option>
+ ))}
+ </select>
+ </div>
+ </div>
               </div>
             </div>
 
